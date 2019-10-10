@@ -1,6 +1,11 @@
 const readlinne = require('readline-sync')
+const robots = { 
+    text: require('./robots/text.js') // IMPORTANDO DA CLASSE TEXT.JS
+}
 
-function start(){
+// ASYNC É O COMANDO QUE FAZ COM QUE ELE PRIMEIRO BUSQUE NO WIKIPEDIA E DEPOIS CONTINUE O PROCESSO QUE FOI CHAMDO PRIMEIRO
+
+async function start(){
     // 
     const content = {} // APESAR DE SER "CONST" O JS DEIXA A GENTE ALTERAR ESSA CONST
 
@@ -8,6 +13,8 @@ function start(){
                                                    // ele colocar o "TERM EXAMPLE" como valor dentro da searchTerm
 
     content.prefix     = askAndReturnPrefix();
+
+    await robots.text( content );
 
     function askAndReturnSearchTerm(){
         // return "TERM EXAMPLE" // testar no terminal como node index.js
@@ -27,7 +34,7 @@ function start(){
 
     }
 
-    console.log( content );
+    //console.log( content );
 
 }
 
