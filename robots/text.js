@@ -4,24 +4,33 @@ const sentenceBoundaryDetection = require('sbd') //ISSO É MUITO IMPORTANTE....
                                                  // POIS SEPARA AS SENTENÇAS QUE É CRUCIAL PARA O FUNCIONAMENTO DO ROBÔ. UTILIZEI "npm i sbd" uma biblioteca do proprio node
 const Promise = require('es6-promise').Promise 
 const WatsonApiKey = require("../credentials/watson-nlu.json").apikey // usei o npm i watson-developer-cloud 
-
+const state = require('./state.js') // importando o robo de state pra salvar
  
 const NaturalLanguageUnderstandingV1 = require('watson-developer-cloud/natural-language-understanding/v1.js') // esse é um submodulo do watson
  
-var nlu = new NaturalLanguageUnderstandingV1({ // bloco que aplica o bloco de codigo da API
+const nlu = new NaturalLanguageUnderstandingV1({ // bloco que aplica o bloco de codigo da API
   iam_apikey: WatsonApiKey, 
   version: '2018-04-05',
   url: 'https://gateway.watsonplatform.net/natural-language-understanding/api/'
 }) 
 
 
-async function robot( content ){ // CONTENT É UM INPUT DE ENTRADA QUE RECEBERÁ
+async function robot(){ // CONTENT É UM INPUT DE ENTRADA QUE RECEBERÁ
+
+     
+    const content =  state.load(); // CARREGUEI O ROBO COM AS INFORMAÇÕE ANTERIORES não esquecer de colocar os () para indicar que é função
+     
 
    await fetchContentFromWikipedia(content) // Baixa o conteúdo do Wikipedia
          snaitizeContent(content)           // Limpa do conteúdo
          breakContentIntoSentences(content) // Quebra o contaúdo em sentenças
          limitMaximumSentences( content ) // limita as sentenças em até 7 de acordo com o programado no index.js
    await fetchKeywordsOfAllSentences( content )
+   
+
+
+   state.save(content); // SALVEI O ROBO COM AS INFORMAÇÕES ATUALIZADAS
+
     //console.log(`Recebi com sucesso o content: ${content.searchTerm} `) 
 
  //   console.log('Logando se a função fetchContentFromWikipedia retorna ');
@@ -31,11 +40,13 @@ async function robot( content ){ // CONTENT É UM INPUT DE ENTRADA QUE RECEBERÁ
     async function fetchContentFromWikipedia(content){
          
         const algorithmiaAuthenticated = algorithmia( algorithmiaApiKey ) // autenticação dentro da api algorthmia
-        const wikipediaAlgorithm = algorithmiaAuthenticated.algo('web/WikipediaParser/0.1.2') // Link que chama o robo que pega do wikipedia o conteúdo
+        const wikipediaAlgorithm = algorithmiaAuthenticated.algo('web/WikipediaParser/0.1.2') // Link que chama o robo que pega do wikipedia o conteúdo        
         const wikipediaResponse = await wikipediaAlgorithm.pipe( { "lang" : content.lang,
                                                                    "articleName": content.searchTerm } ) // é no pipe que eu passo o conteúdo para buscar dentro do wikipedia. No meu caso usei o SearchTerm criado no index.js
                                   // await para poder interpretar a resposta do pipe quando promisse
         const wikipediaContent = wikipediaResponse.get(); // get é a resposta qu eele dá
+        
+        
         
         content.sourceContentOriginal = wikipediaContent.content;
 
@@ -138,11 +149,6 @@ async function fetchWatsonAndReturnKeywords(sentence){
         } )
     })
 }
-
-
-
-
-
 }
 
 module.exports = robot // ???
