@@ -12,7 +12,7 @@ async function start(){
     
 robots.input()
 
-await robots.text()
+await robots.text();
 
 const content = robots.state.load();
 console.dir(content, {depth: null}) // ELE MANTEM O CONSOLE.LOG MAS APRESENTA TUDO FORMATADO

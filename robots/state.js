@@ -2,6 +2,7 @@ const fs = require('fs')
 const contentFilePath = "./content.json"
 
 
+
 // METODO PARA SALVAR
 function save(content){ 
     const contentString = JSON.stringify(content)// TRANSFORMAR O JSON EM STRING
