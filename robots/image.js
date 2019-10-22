@@ -1,4 +1,5 @@
 const google = require('googleapis').google
+const imageDownloader = require('image-downloader')
 const customSearch = google.customsearch('v1') // essa é a instância responsável pelo CustomSearch
 const state = require('./state.js')
 
@@ -8,8 +9,11 @@ const googleSearchCredentials = require('../credentials/google-search.json')
 async function robot() {
 
     const content = state.load();
-    await fetchImagesOfAllSentences(content)
-    state.save(content)
+    // await fetchImagesOfAllSentences(content)
+
+    await downloadAllImages(content)
+
+    // state.save(content)
 
     async function fetchImagesOfAllSentences(content) {
         // content.sentences.map((item)=>{
@@ -41,6 +45,42 @@ async function robot() {
 
         return imagesUrl;
 
+    }
+
+    async function downloadAllImages(content) {
+        content.downloadedImages = [] // array das minhas imagens baixadas
+ 
+        for (let sentenceIndex = 0; sentenceIndex < content.sentences.length; sentenceIndex++) {
+            const images = content.sentences[sentenceIndex].images
+
+            for (let imageIndex = 0; imageIndex < images.length; imageIndex++) {
+                const imageUrl = images[imageIndex]
+
+                try { 
+                    if (content.downloadedImages.includes(imageUrl)){ // aqui eu pergunto se dentro do array já contem uma imagem baixada
+                        throw new Error('Imagem já foi baixada')
+                        
+                    }
+                    await downloadAndSave( imageUrl, `${sentenceIndex}-original.png`) // aqui a gente quer salvar como para cada imagem tem um index
+                    content.downloadedImages.push(imageUrl)
+                    console.log (`[${sentenceIndex}][${imageIndex}] > Baixou imagem com sucesso: ${imageUrl}` )
+                    break 
+                }
+                catch (error) {
+                    console.log ( `[${sentenceIndex}][${imageIndex}] > Erro ao baixar imagem: (${imageUrl}) : ${error}` )
+                }
+            }
+
+        }
+
+
+    } 
+
+    async function downloadAndSave( url, fileName ){ // função da biblioteca image-downloader que baixa a image
+        return imageDownloader.image({
+            url,url,
+            dest: `./images_downloaded/ ${fileName}` 
+        })
     }
  
 }
