@@ -32,7 +32,7 @@
          const selectedPrefixText = prefixes[selectedPrefixIndex]  // TRAZ O TEXTO DE ACORDO COM O ÍNDICE
          
         // return texto ao 
-        console.log( content )
+        //console.log( content )
         return selectedPrefixText
     }
 
