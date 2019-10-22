@@ -137,8 +137,8 @@ async function fetchWatsonAndReturnKeywords(sentence){
              resolve(keywords)
 
 
-            console.log(sentence)
-            console.log( JSON.stringify( response, null, 4) ) // se der certo ele joga pra essa 
+  //          console.log(sentence)
+  //          console.log( JSON.stringify( response, null, 4) ) // se der certo ele joga pra essa 
                                                                 // JSON.stringify() é uma função do 
                                                                 // objeto JSON que criará uma string do objeto
                                                                 // dentro do padrão adotado pelo JSON
