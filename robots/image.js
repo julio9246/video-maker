@@ -9,11 +9,12 @@ const googleSearchCredentials = require('../credentials/google-search.json')
 async function robot() {
 
     const content = state.load();
-    // await fetchImagesOfAllSentences(content)
+    
+    await fetchImagesOfAllSentences(content)
 
     await downloadAllImages(content)
 
-    // state.save(content)
+    state.save(content)
 
     async function fetchImagesOfAllSentences(content) {
         // content.sentences.map((item)=>{
