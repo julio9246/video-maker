@@ -11,12 +11,12 @@ async function robot() {
 
     const content = state.load();
     
-    // await fetchImagesOfAllSentences(content)
-    // await downloadAllImages(content)
+    await fetchImagesOfAllSentences(content)
+    await downloadAllImages(content)
 
     await convertAllImages(content)
 
-    // state.save(content)
+    state.save(content)
 
     async function fetchImagesOfAllSentences(content) {
         // content.sentences.map((item)=>{
@@ -102,7 +102,7 @@ async function robot() {
             const height = 1080
 
             gm()
-            .in(inputFile) 
+            .in(inputFile)  
             .out("(")
               .out("-clone")
               .out("0")
