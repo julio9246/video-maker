@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/julio9246/video-maker#readme",
   "dependencies": {
+    "after-effects": "^0.4.15",
     "algorithmia": "^0.3.10",
     "es6-promise": "^4.2.8",
     "gm": "^1.23.1",

@@ -90,12 +90,14 @@ function breakContentIntoSentences(content){
 
     const sentences =  sentenceBoundaryDetection.sentences(content.sourceContentSanitized) // traz um array de sentenças separados por virgula
     
+
     sentences.forEach((sentence) => {
         content.sentences.push({ // injeta no array de sentenças
             text: sentence,
             keywords: [],
             images: []
         })
+
     })
     
 
